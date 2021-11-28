@@ -55,7 +55,7 @@ double calcularValorTotal(int *itensDoPedido) {
                 valorTotal = valorTotal + (10 * itensDoPedido[i]);
             }
              // i = 3 equivale ao Churrasco
-             if (i == 2) {
+             if (i == 3) {
                 valorTotal = valorTotal + (20 * itensDoPedido[i]);
             }
         }
