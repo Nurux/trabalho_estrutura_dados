@@ -4,14 +4,6 @@
 
 #include "pedidos.h"
 
-// vetor de char para auxiliar na impressao
-const char *card[] = {
-    "PF",
-    "Bebidas",
-    "Sobremesa",
-    "Churrasco"
-};
-
 // lista dos itens do cardapio
 typedef struct cardapio {
     int id;
@@ -29,8 +21,8 @@ typedef struct itemPedido {
 
 // fila de pedidos
 typedef struct pedido {
-    int numMesa;
-    int *itensDoPedido;
+    int id;
+    struct itemPedido *itensDoPedido;
     double valorTotal;
     struct pedido *prox;
 } Pedido;
@@ -41,7 +33,11 @@ typedef struct pedido {
     ****************************************
 */
 
-int id = 1;
+// guarda o id para incrementar a cada item na lista do cardapio
+int idCardapio = 1;
+
+// guarda o id para incrementar a cada item na fila de pedidos
+int idPedido = 1;
 
 Cardapio *cardapio;
 
@@ -60,10 +56,10 @@ int inserirNoCardapio(char *nome, double valor) {
     strcpy(novoNo->nome, nome);
     novoNo->valor = valor;
     novoNo->prox = NULL;
-    novoNo->id = id;
+    novoNo->id = idCardapio;
 
     // incrementa o id dos itens do cardapio
-    id++;
+    idCardapio++;
 
     if (cardapio == NULL) {
         cardapio = novoNo;
@@ -82,7 +78,7 @@ int inserirNoCardapio(char *nome, double valor) {
 // retorna 2 se o id for menor que zero e 1 se nao for encontrado
 Cardapio *buscarNoCardapio(int id) {
     if (id <= 0) {
-        return 2;
+        return NULL;
     }
 
     Cardapio *aux = cardapio;
@@ -100,7 +96,7 @@ Cardapio *buscarNoCardapio(int id) {
         return aux;
     }
 
-    return 1;
+    return NULL;
 }
 
 void printarCardapio() {
@@ -124,7 +120,7 @@ void printarCardapio() {
     ****************************************
 */
 
-ItemPedido *incializarPedido() {
+ItemPedido *inicializarPedido() {
     return NULL;
 }
 
@@ -132,10 +128,10 @@ ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) 
 
     ItemPedido *novoNo = (ItemPedido*)malloc(sizeof(ItemPedido));
     novoNo->item = buscarNoCardapio(id);
-    if (novoNo->item == 1) {
-        return 1;
+    if (novoNo->item == NULL) {
+        return NULL;
     }
-    novoNo->quantidade;
+    novoNo->quantidade = quantidade;
 
     if (itemPedido == NULL) {
         return novoNo;
@@ -147,7 +143,21 @@ ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) 
     }
     aux->prox = novoNo;
 
-    return aux;
+    return itemPedido;
+}
+
+void printarItensDoPedido(ItemPedido *itemPedido) {
+    if (itemPedido == NULL) {
+        return;
+    }
+
+    ItemPedido *aux = itemPedido;
+    while (aux->prox != NULL) {
+        printf("%s R$ %.2f Quantidade: %d\n", aux->item->nome, aux->item->valor, aux->quantidade);
+        aux = aux->prox;
+    }
+
+    printf("%s R$ %.2f Quantidade: %d\n", aux->item->nome, aux->item->valor, aux->quantidade);
 }
 
 // ****************************************
@@ -172,41 +182,30 @@ Pedido *ultimo;
     significa que há um item do pedido referente ao index
     a quantidade de itens do pedido será o valor dentro do array no index informado
 */
-double calcularValorTotal(int *itensDoPedido) {
+double calcularValorTotal(ItemPedido *itemPedido) {
     double valorTotal = 0;
 
-    for (int i = 0; i < 4; i++) {
-        if (itensDoPedido[i] != -1) {
-            // i = 0 equivale ao PF
-            if (i == 0) {
-                valorTotal = valorTotal + (20 * itensDoPedido[i]);
-            }
-            // i = 1 equivale ao Bebidas
-            if (i == 1) {
-                valorTotal = valorTotal + (10 * itensDoPedido[i]);
-            }
-            // i = 2 equivale ao Sorvete
-             if (i == 2) {
-                valorTotal = valorTotal + (10 * itensDoPedido[i]);
-            }
-             // i = 3 equivale ao Churrasco
-             if (i == 3) {
-                valorTotal = valorTotal + (20 * itensDoPedido[i]);
-            }
-        }
+    ItemPedido *aux = itemPedido;
+    while (aux->prox != NULL) {
+        valorTotal = valorTotal + (aux->quantidade * aux->item->valor);
+        aux = aux->prox;
     }
+    valorTotal = valorTotal + (aux->quantidade * aux->item->valor);
 
     return valorTotal;
 }
 
 // retorna 0 se der tudo certo
-int enfileirar(int numMesa, int *itensDoPedido) {
-    double valorTotal = calcularValorTotal(itensDoPedido);
+int enfileirar(ItemPedido *itemPedido) {
+    double valorTotal = calcularValorTotal(itemPedido);
 
     Pedido *ped = (Pedido*)malloc(sizeof(Pedido));
-    ped->numMesa = numMesa;
+    ped->id = idPedido;
+    ped->itensDoPedido = itemPedido;
     ped->valorTotal = valorTotal;
-    ped->itensDoPedido = itensDoPedido;
+
+    // incrementa o id global dos pedidos
+    idPedido++;
 
     if (ultimo == NULL) {
         primeiro = ped;
@@ -219,39 +218,68 @@ int enfileirar(int numMesa, int *itensDoPedido) {
     return 0;
 }
 
+int pegarQuantidadeDeItensDoPedido(ItemPedido *itemPedido) {
+    int quantidade = 0;
+
+    ItemPedido *aux = itemPedido;
+    while (aux->prox != NULL) {
+        quantidade++;
+        aux = aux->prox;
+    }
+    quantidade++;
+
+    return quantidade;
+}
+
 // retorna 1 se a fila de pedidos estiver nula
-int printarPedidos() {
+void printarPedidos() {
     if (primeiro == NULL) {
-        return 1;
+        printf("\n\n\nNão há pedidos na fila!\n\n\n");
+        return;
     }
 
+    // percorre todos os pedidos
     Pedido *aux = primeiro;
+
+    // percorre todos os itens de cada pedido
+    ItemPedido *auxItemPedido;
     while (aux->prox != NULL) {
-        printf("Itens do pedido da mesa %d:\n", aux->numMesa);
-        for (int i = 0; i < 4; i++) {
-            if (aux->itensDoPedido[i] != -1) {
-                printf("%s\n", card[i]);
-            }
+        auxItemPedido = aux->itensDoPedido;
+
+        printf("\n\nPedidos da mesa: %d\n", aux->id);
+
+        while (auxItemPedido->prox != NULL) {
+            printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
+
+            auxItemPedido = auxItemPedido->prox;
         }
-        printf("Valor total: %f", aux->valorTotal);
-        printf("\n");
-        printf("\n");
+
+        printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
+
+        printf("\nValor total: R$ %.2f", aux->valorTotal);
+        printf("__________________________________________________");
 
         aux = aux->prox;
     }
-    printf("Itens do pedido da mesa %d:\n", aux->numMesa);
-    for (int i = 0; i < 4; i++) {
-        if (aux->itensDoPedido[i] != -1) {
-            printf("%s\n", card[i]);
-        }
-    }
-    printf("Valor total: %f", aux->valorTotal);
-    printf("\n");
+    auxItemPedido = aux->itensDoPedido;
 
-    return 0;
+    printf("\n\nPedidos da mesa: %d\n", aux->id);
+
+    while (auxItemPedido->prox != NULL) {
+        printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
+
+        auxItemPedido = auxItemPedido->prox;
+    }
+
+    printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
+
+    printf("\nValor total: R$ %.2f\n", aux->valorTotal);
+    printf("__________________________________________________");
+
+    aux = aux->prox;
 }
 
 // precisa implementar a funcao de busca para fazer essa
-int printarPedidoPorId(int numMesa) {
-    return 0;
+void printarPedidoPorId(int numMesa) {
+    return;
 }

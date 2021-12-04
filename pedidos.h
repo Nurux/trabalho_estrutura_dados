@@ -6,20 +6,25 @@ struct pedido;
 
 int inserirNoCardapio(char *nome, double valor);
 
+struct cardapio *buscarNoCardapio(int id);
+
 void printarCardapio();
 
 // funcoes dos itens do pedido
 
-struct itemPedido *incializarPedido();
+struct itemPedido *inicializarPedido();
 
 struct itemPedido *inserirItemNoPedido(int id, int quantidade, struct itemPedido *itemPedido);
 
+void printarItensDoPedido();
 // funcoes da fila
 
-double calcularValorTotal(int *itensDoPedido);
+double calcularValorTotal(struct itemPedido *itemPedido);
 
-int enfileirar(int numMesa, int *itensDoPedido);
+int enfileirar(struct itemPedido *itemPedido);
 
-int printarPedidos();
+int pegarQuantidadeDeItensDoPedido();
 
-int printarPedidoPorId(int numMesa);
+void printarPedidos();
+
+void printarPedidoPorId(int numMesa);

@@ -16,7 +16,7 @@ int main() {
     instanciarCardapio();
 
     int escolha = -1;
-    int item = 0;
+    int item = -1;
     int quantidade = 0;
     // 
     struct itemPedido *itemPedido;
@@ -24,7 +24,7 @@ int main() {
     while (escolha != 0) {
         itemPedido = inicializarPedido();
 
-        printf("O que você deseja?\n");
+        printf("\n\n\nO que você deseja?\n");
         printf("Digite (1) para fazer um novo pedido\n");
         printf("Digite (2) para listar os pedidos existentes\n");
         printf("Digite (3) para buscar um pedido\n");
@@ -35,27 +35,37 @@ int main() {
         switch (escolha) {
             case 1:
                 while (item != 0) {
-                    printf("Itens do cardapio:\n");
+                    system("clear");
+
+                    printf("\nItens do pedido ate agora:\n\n");
+                    printarItensDoPedido(itemPedido);
+
+                    printf("\nItens do cardapio:\n");
                     printarCardapio();
-                    printf("\nPara sair digite 0!\n");
+                    printf("\nPara sair e cancelar o pedido digite 0!\n");
+                    printf("Para finalizar o pedido, digite -1\n");
                     printf("Digite o numero correspondente ao item do cardapio que você deseja: ");
                     fflush(stdin);
                     scanf("%d", &item);
 
-                    switch (item) {
-                        case 1:
-                            printf("\nDigite a quantidade: ");
-                            scanf("%d", &quantidade);
-                            itemPedido = inserirItemNoPedido(item, quantidade, itemPedido);
-                            break;
-
-                        case 2:
-                            break;
+                    // -1 para finalizar pedido
+                    if (item == -1) {
+                        enfileirar(itemPedido);
+                        break;
                     }
+
+                    printf("\nDigite a quantidade: ");
+                    fflush(stdin);
+                    scanf("%d", &quantidade);
+
+
+
+                    itemPedido = inserirItemNoPedido(item, quantidade, itemPedido);
                 }
                 break;
 
             case 2:
+                printarPedidos();
                 break;
 
             case 3:
