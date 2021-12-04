@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "pedidos.h"
 
@@ -11,6 +12,21 @@ const char *card[] = {
     "Churrasco"
 };
 
+// lista dos itens do cardapio
+typedef struct cardapio {
+    char nome[50];
+    double valor;
+    struct cardapio *prox;
+} Cardapio;
+
+// lista dos intes do pedido
+typedef struct itemPedido {
+    struct cardapio *item;
+    int quantidade;
+    struct itemPedido *prox;
+} itemPedido;
+
+// fila de pedidos
 typedef struct pedido {
     int numMesa;
     int *itensDoPedido;
@@ -18,16 +34,72 @@ typedef struct pedido {
     struct pedido *prox;
 } Pedido;
 
-// guarda o ponteiro do primeiro elemento da fila
-Pedido *primeiro;
-// guarda o ponteiro do ultimo elemento da fila
-Pedido *ultimo;
+/*
+    ****************************************
+     FUNCOES DA LISTA DOS ITENS DO CARDAPIO
+    ****************************************
+*/
+
+Cardapio *cardapio;
+
+int inserirNoCardapio(char *nome, double valor) {
+    // se o valor for negativo ele retorna 1
+    if (valor <= 0) {
+        return 1;
+    }
+
+    if (nome == NULL) {
+        return 1;
+    }
+
+    // alocando novo no da lista de itens do cardapio
+    Cardapio *novoNo = (Cardapio*)malloc(sizeof(Cardapio));
+    strcpy(novoNo->nome, nome);
+    novoNo->valor = valor;
+    novoNo->prox = NULL;
+
+    if (cardapio == NULL) {
+        cardapio = novoNo;
+        return 0;
+    }
+
+    Cardapio *aux = cardapio;
+    while (aux->prox != NULL) {
+        aux = aux->prox;
+    }
+    aux->prox = novoNo;
+
+    return 0;
+}
+
+void printarCardapio() {
+    if (cardapio == NULL) {
+        return;
+    }
+
+    Cardapio *aux = cardapio;
+    while (aux->prox != NULL) {
+        printf("Nome do item: %s\n", aux->nome);
+        printf("Valor do item: %f\n", aux->valor);
+        aux = aux->prox;
+    }
+    printf("Nome do item: %s\n", aux->nome);
+    printf("Valor do item: %f\n", aux->valor);
+}
+
+// ****************************************
 
 /*
     ****************************************
                 FUNCOES DA FILA
     ****************************************
 */
+
+// guarda o ponteiro do primeiro elemento da fila
+Pedido *primeiro;
+// guarda o ponteiro do ultimo elemento da fila
+Pedido *ultimo;
+
 
 // funcao para calcular o valor total do pedido
 /*

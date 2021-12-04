@@ -4,17 +4,11 @@
 #include "pedidos.h"
 
 int main() {
-    int itensDoPedido[4] = {2, -1, 2, -1};
-    int itensDoPedido2[4] = {-1, -1, 2, 3};
-    int result = -1;
+    inserirNoCardapio("Prato Feito", 20.0);
+    inserirNoCardapio("Sorvete", 10.0);
+    inserirNoCardapio("Churrasco", 20.0);
 
-    result = enfileirar(25, itensDoPedido);
-    result = enfileirar(35, itensDoPedido2);
-    result = enfileirar(45, itensDoPedido2);
-    result = enfileirar(55, itensDoPedido2);
-    result = enfileirar(65, itensDoPedido2);
-
-    result = printarPedidos();
+    printarCardapio();
 
     return 0;
 }
