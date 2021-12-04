@@ -14,6 +14,7 @@ const char *card[] = {
 
 // lista dos itens do cardapio
 typedef struct cardapio {
+    int id;
     char nome[50];
     double valor;
     struct cardapio *prox;
@@ -24,7 +25,7 @@ typedef struct itemPedido {
     struct cardapio *item;
     int quantidade;
     struct itemPedido *prox;
-} itemPedido;
+} ItemPedido;
 
 // fila de pedidos
 typedef struct pedido {
@@ -39,6 +40,8 @@ typedef struct pedido {
      FUNCOES DA LISTA DOS ITENS DO CARDAPIO
     ****************************************
 */
+
+int id = 1;
 
 Cardapio *cardapio;
 
@@ -57,6 +60,10 @@ int inserirNoCardapio(char *nome, double valor) {
     strcpy(novoNo->nome, nome);
     novoNo->valor = valor;
     novoNo->prox = NULL;
+    novoNo->id = id;
+
+    // incrementa o id dos itens do cardapio
+    id++;
 
     if (cardapio == NULL) {
         cardapio = novoNo;
@@ -72,6 +79,30 @@ int inserirNoCardapio(char *nome, double valor) {
     return 0;
 }
 
+// retorna 2 se o id for menor que zero e 1 se nao for encontrado
+Cardapio *buscarNoCardapio(int id) {
+    if (id <= 0) {
+        return 2;
+    }
+
+    Cardapio *aux = cardapio;
+    if (aux->id == id) {
+        return aux;
+    }
+
+    while (aux->prox != NULL) {
+        if (aux->id == id) {
+            return aux;
+        }
+        aux = aux->prox;
+    }
+    if (aux->id == id) {
+        return aux;
+    }
+
+    return 1;
+}
+
 void printarCardapio() {
     if (cardapio == NULL) {
         return;
@@ -79,12 +110,44 @@ void printarCardapio() {
 
     Cardapio *aux = cardapio;
     while (aux->prox != NULL) {
-        printf("Nome do item: %s\n", aux->nome);
-        printf("Valor do item: %f\n", aux->valor);
+        printf("Id: %d Nome do item: %s \t", aux->id, aux->nome);
+        printf("Valor do item: R$ %.2f\n", aux->valor);
         aux = aux->prox;
     }
-    printf("Nome do item: %s\n", aux->nome);
-    printf("Valor do item: %f\n", aux->valor);
+    printf("Id: %d Nome do item: %s \t", aux->id, aux->nome);
+    printf("Valor do item: R$ %.2f\n", aux->valor);
+}
+
+/*
+    ****************************************
+      FUNCOES DA LISTA DOS ITENS DO PEDIDO
+    ****************************************
+*/
+
+ItemPedido *incializarPedido() {
+    return NULL;
+}
+
+ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) {
+
+    ItemPedido *novoNo = (ItemPedido*)malloc(sizeof(ItemPedido));
+    novoNo->item = buscarNoCardapio(id);
+    if (novoNo->item == 1) {
+        return 1;
+    }
+    novoNo->quantidade;
+
+    if (itemPedido == NULL) {
+        return novoNo;
+    }
+
+    ItemPedido *aux = itemPedido;
+    while (aux->prox != NULL) {
+        aux = aux->prox;
+    }
+    aux->prox = novoNo;
+
+    return aux;
 }
 
 // ****************************************
