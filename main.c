@@ -20,6 +20,7 @@ int main() {
     int quantidade = 0;
     int id = 0;
     int flag = -1;
+    int qntCardapio = 0;
     // 
     struct itemPedido *itemPedido;
     struct pedido *pedido;
@@ -31,6 +32,7 @@ int main() {
         item = -1;
         id = 0;
         flag = -1;
+        qntCardapio = getQuantidadeDeItensDoCardapio();
 
         printf("\n\n\nO que você deseja?\n");
         printf("Digite (1) para fazer um novo pedido\n");
@@ -57,6 +59,11 @@ int main() {
                     fflush(stdin);
                     scanf("%d", &item);
 
+                    if (item > qntCardapio) {
+                        printf("Digite uma opcao valida!\n");
+                        continue;
+                    }
+
                     // 0 para cancelar o pedido
                     if (item == 0) {
                         break;
@@ -79,8 +86,6 @@ int main() {
                     printf("\nDigite a quantidade: ");
                     fflush(stdin);
                     scanf("%d", &quantidade);
-
-
 
                     itemPedido = inserirItemNoPedido(item, quantidade, itemPedido);
                 }

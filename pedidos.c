@@ -97,6 +97,18 @@ Cardapio *buscarNoCardapio(int id) {
     return NULL;
 }
 
+int getQuantidadeDeItensDoCardapio() {
+    Cardapio *aux = cardapio;
+
+    int cont = 1;
+    while (aux->prox != NULL) {
+        cont++;
+        aux = aux->prox;
+    }
+
+    return cont;
+}
+
 void printarCardapio() {
     if (cardapio == NULL) {
         return;

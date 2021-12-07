@@ -8,6 +8,8 @@ int inserirNoCardapio(char *nome, double valor);
 
 struct cardapio *buscarNoCardapio(int id);
 
+int getQuantidadeDeItensDoCardapio();
+
 void printarCardapio();
 
 // funcoes dos itens do pedido
