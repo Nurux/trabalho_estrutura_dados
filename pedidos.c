@@ -292,6 +292,52 @@ Pedido *buscarPedido(int id) {
     return NULL;
 }
 
+// retorna 1 se a lita estiver nula
+int desenfileirar() {
+    if (primeiro == NULL) {
+        return 1;
+    }
+
+    if (primeiro == ultimo) {
+        primeiro = NULL;
+        ultimo = NULL;
+        return 0;
+    }
+    primeiro = primeiro->prox;
+    return 0;
+}
+
+int deletarPedido(int id) {
+    Pedido *aux = primeiro;
+    Pedido *anterior = aux;
+
+    int cont = 1;
+
+    while (aux->prox != NULL) {
+        if (aux->id == id) {
+            if (cont == 1) {
+                primeiro = primeiro->prox;
+                return 0;
+            }
+            anterior->prox = aux->prox;
+            return 0;
+        }
+        cont++;
+        anterior = aux;
+        aux = aux->prox;
+    }
+
+    if (aux->id == id) {
+        if (aux == ultimo) {
+            ultimo = anterior;
+            anterior->prox = NULL;
+        }
+        return 0;
+    }
+
+    return 1;
+}
+
 // retorna 1 se a fila de pedidos estiver nula
 void printarPedidos() {
     if (primeiro == NULL) {

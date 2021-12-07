@@ -38,6 +38,8 @@ int main() {
         printf("Digite (1) para fazer um novo pedido\n");
         printf("Digite (2) para listar os pedidos existentes\n");
         printf("Digite (3) para buscar um pedido\n");
+        printf("Digite (4) para cancelar um pedido\n");
+        printf("Digite (5) para concluir o primeiro pedido da fila\n");
         printf("Digite (0) para sair\n");
         fflush(stdin);
         scanf("%d", &escolha);
@@ -104,6 +106,22 @@ int main() {
                 if (flag == 1) {
                     printf("Nao encontrado!\n");
                 }
+                break;
+
+            case 4:
+                printf("Digite o Id referente ao pedido: ");
+                fflush(stdin);
+                scanf("%d", &id);
+
+                flag = deletarPedido(id);
+                if (flag == 1) {
+                    printf("Nao encontrado!\n");
+                }
+                break;
+
+            case 5:
+                desenfileirar();
+                printf("\n\nPedido concluido\n\n");
                 break;
 
             case 0:

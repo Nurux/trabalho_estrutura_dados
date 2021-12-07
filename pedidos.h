@@ -30,6 +30,10 @@ int enfileirar(struct itemPedido *itemPedido);
 
 struct pedido *buscarPedido(int id);
 
+int desenfileirar();
+
+int deletarPedido(int id);
+
 void printarPedidos();
 
 int printarPedidoPorId(int id);
