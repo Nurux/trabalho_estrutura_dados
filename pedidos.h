@@ -16,15 +16,16 @@ struct itemPedido *inicializarPedido();
 
 struct itemPedido *inserirItemNoPedido(int id, int quantidade, struct itemPedido *itemPedido);
 
-void printarItensDoPedido();
+void printarItensDoPedido(struct itemPedido *itemPedido);
+
 // funcoes da fila
 
 double calcularValorTotal(struct itemPedido *itemPedido);
 
 int enfileirar(struct itemPedido *itemPedido);
 
-int pegarQuantidadeDeItensDoPedido();
+struct pedido *buscarPedido(int id);
 
 void printarPedidos();
 
-void printarPedidoPorId(int numMesa);
+int printarPedidoPorId(int id);

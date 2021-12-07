@@ -18,12 +18,19 @@ int main() {
     int escolha = -1;
     int item = -1;
     int quantidade = 0;
+    int id = 0;
+    int flag = -1;
     // 
     struct itemPedido *itemPedido;
+    struct pedido *pedido;
 
     while (escolha != 0) {
         itemPedido = inicializarPedido();
+        pedido = NULL;
+
         item = -1;
+        id = 0;
+        flag = -1;
 
         printf("\n\n\nO que você deseja?\n");
         printf("Digite (1) para fazer um novo pedido\n");
@@ -75,10 +82,18 @@ int main() {
                 break;
 
             case 3:
+                printf("Digite o Id referente ao pedido: ");
+                fflush(stdin);
+                scanf("%d", &id);
+
+                flag = printarPedidoPorId(id);
+                if (flag == 1) {
+                    printf("Nao encontrado!\n");
+                }
                 break;
 
             case 0:
-                printf("Até mais!\n");
+                printf("\n\nAté mais!\n\n");
                 break;
 
             default:

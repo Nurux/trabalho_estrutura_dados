@@ -217,17 +217,29 @@ int enfileirar(ItemPedido *itemPedido) {
     return 0;
 }
 
-int pegarQuantidadeDeItensDoPedido(ItemPedido *itemPedido) {
-    int quantidade = 0;
+Pedido *buscarPedido(int id) {
+    if (id <= 0) {
+        return NULL;
+    }
 
-    ItemPedido *aux = itemPedido;
+    Pedido *aux = primeiro;
+    if (aux->id == id) {
+        return aux;
+    }
+
     while (aux->prox != NULL) {
-        quantidade++;
+        if (aux->id == id) {
+            return aux;
+        }
+
         aux = aux->prox;
     }
-    quantidade++;
 
-    return quantidade;
+    if (aux->id == id) {
+        return aux;
+    }
+
+    return NULL;
 }
 
 // retorna 1 se a fila de pedidos estiver nula
@@ -246,39 +258,30 @@ void printarPedidos() {
         auxItemPedido = aux->itensDoPedido;
 
         printf("\n\nPedidos da mesa: %d\n", aux->id);
-
-        while (auxItemPedido->prox != NULL) {
-            printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
-
-            auxItemPedido = auxItemPedido->prox;
-        }
-
-        printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
-
+        printarItensDoPedido(auxItemPedido);
         printf("\nValor total: R$ %.2f", aux->valorTotal);
         printf("\n__________________________________________________");
 
         aux = aux->prox;
     }
     auxItemPedido = aux->itensDoPedido;
-
     printf("\n\nPedidos da mesa: %d\n", aux->id);
-
-    while (auxItemPedido->prox != NULL) {
-        printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
-
-        auxItemPedido = auxItemPedido->prox;
-    }
-
-    printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
-
-    printf("\nValor total: R$ %.2f\n", aux->valorTotal);
+    printarItensDoPedido(auxItemPedido);
+    printf("\nValor total: R$ %.2f", aux->valorTotal);
     printf("\n__________________________________________________");
-
-    aux = aux->prox;
 }
 
 // precisa implementar a funcao de busca para fazer essa
-void printarPedidoPorId(int numMesa) {
-    return;
+int printarPedidoPorId(int id) {
+    Pedido *pedido = buscarPedido(id);
+    if (pedido == NULL) {
+        return 1;
+    }
+
+    printf("\n\n\nPedido da mesa: %d:\n", pedido->id);
+    printarItensDoPedido(pedido->itensDoPedido);
+    printf("\nValor total: R$ %.2f", pedido->valorTotal);
+    printf("\n__________________________________________________");
+
+    return 0;
 }
