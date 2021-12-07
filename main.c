@@ -23,6 +23,7 @@ int main() {
 
     while (escolha != 0) {
         itemPedido = inicializarPedido();
+        item = -1;
 
         printf("\n\n\nO que você deseja?\n");
         printf("Digite (1) para fazer um novo pedido\n");
@@ -48,6 +49,11 @@ int main() {
                     fflush(stdin);
                     scanf("%d", &item);
 
+                    // 0 para cancelar o pedido
+                    if (item == 0) {
+                        break;
+                    }
+
                     // -1 para finalizar pedido
                     if (item == -1) {
                         enfileirar(itemPedido);
@@ -69,6 +75,10 @@ int main() {
                 break;
 
             case 3:
+                break;
+
+            case 0:
+                printf("Até mais!\n");
                 break;
 
             default:

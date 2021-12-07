@@ -36,9 +36,6 @@ typedef struct pedido {
 // guarda o id para incrementar a cada item na lista do cardapio
 int idCardapio = 1;
 
-// guarda o id para incrementar a cada item na fila de pedidos
-int idPedido = 1;
-
 Cardapio *cardapio;
 
 int inserirNoCardapio(char *nome, double valor) {
@@ -164,10 +161,12 @@ void printarItensDoPedido(ItemPedido *itemPedido) {
 
 /*
     ****************************************
-                FUNCOES DA FILA
+            FUNCOES DA FILA DE PEDIDOS
     ****************************************
 */
 
+// guarda o id para incrementar a cada item na fila de pedidos
+int idPedido = 1;
 // guarda o ponteiro do primeiro elemento da fila
 Pedido *primeiro;
 // guarda o ponteiro do ultimo elemento da fila
@@ -257,7 +256,7 @@ void printarPedidos() {
         printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
 
         printf("\nValor total: R$ %.2f", aux->valorTotal);
-        printf("__________________________________________________");
+        printf("\n__________________________________________________");
 
         aux = aux->prox;
     }
@@ -274,7 +273,7 @@ void printarPedidos() {
     printf("%s R$ %.2f Quantidade: %d\n", auxItemPedido->item->nome, auxItemPedido->item->valor, auxItemPedido->quantidade);
 
     printf("\nValor total: R$ %.2f\n", aux->valorTotal);
-    printf("__________________________________________________");
+    printf("\n__________________________________________________");
 
     aux = aux->prox;
 }
