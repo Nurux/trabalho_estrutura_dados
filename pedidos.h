@@ -16,6 +16,8 @@ struct itemPedido *inicializarPedido();
 
 struct itemPedido *inserirItemNoPedido(int id, int quantidade, struct itemPedido *itemPedido);
 
+struct itemPedido *retirarItemDoPedido(int id, struct itemPedido *itensDoPedido);
+
 void printarItensDoPedido(struct itemPedido *itemPedido);
 
 // funcoes da fila

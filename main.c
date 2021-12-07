@@ -51,7 +51,8 @@ int main() {
                     printf("\nItens do cardapio:\n");
                     printarCardapio();
                     printf("\nPara sair e cancelar o pedido digite 0!\n");
-                    printf("Para finalizar o pedido, digite -1\n");
+                    printf("Para finalizar o pedido, digite -1");
+                    printf("\nPara retirar um item do seu pedido, digite -2\n\n");
                     printf("Digite o numero correspondente ao item do cardapio que você deseja: ");
                     fflush(stdin);
                     scanf("%d", &item);
@@ -59,6 +60,14 @@ int main() {
                     // 0 para cancelar o pedido
                     if (item == 0) {
                         break;
+                    }
+
+                    if (item == -2) {
+                        printf("Digite o id referente a sua lista de pedidos que voce deseja retirar:");
+                        fflush(stdin);
+                        scanf("%d", &id);
+                        itemPedido = retirarItemDoPedido(id, itemPedido);
+                        continue;
                     }
 
                     // -1 para finalizar pedido

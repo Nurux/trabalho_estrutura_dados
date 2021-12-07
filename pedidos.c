@@ -14,6 +14,7 @@ typedef struct cardapio {
 
 // lista dos intes do pedido
 typedef struct itemPedido {
+    int id;
     struct cardapio *item;
     int quantidade;
     struct itemPedido *prox;
@@ -122,8 +123,11 @@ ItemPedido *inicializarPedido() {
 }
 
 ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) {
+    // controla o id dos itens da lista
+    int idItem = 1;
 
     ItemPedido *novoNo = (ItemPedido*)malloc(sizeof(ItemPedido));
+    novoNo->id = idItem;
     novoNo->item = buscarNoCardapio(id);
     if (novoNo->item == NULL) {
         return NULL;
@@ -136,11 +140,44 @@ ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) 
 
     ItemPedido *aux = itemPedido;
     while (aux->prox != NULL) {
+        idItem++;
         aux = aux->prox;
     }
+    idItem++;
+    // necessario para manter o incremento do id apos a remocao de um item
+    if (idItem == aux->id) {
+        idItem++;
+    }
+    novoNo->id = idItem;
     aux->prox = novoNo;
 
     return itemPedido;
+}
+
+ItemPedido *retirarItemDoPedido(int id, ItemPedido *itensDoPedido) {
+    // se id = 1 entao e o primeiro item do pedido
+    if (id == 1) {
+        itensDoPedido = itensDoPedido->prox;
+    }
+
+    ItemPedido *aux = itensDoPedido;
+    ItemPedido *anterior = aux;
+
+    while (aux->prox != NULL) {
+        if (aux->id == id) {
+            anterior->prox = aux->prox;
+            return itensDoPedido;
+        }
+        anterior = aux;
+        aux = aux->prox;
+    }
+
+    if (aux->id == id) {
+        anterior->prox = aux->prox;
+        return itensDoPedido;
+    }
+
+    return itensDoPedido;
 }
 
 void printarItensDoPedido(ItemPedido *itemPedido) {
@@ -150,11 +187,10 @@ void printarItensDoPedido(ItemPedido *itemPedido) {
 
     ItemPedido *aux = itemPedido;
     while (aux->prox != NULL) {
-        printf("%s R$ %.2f Quantidade: %d\n", aux->item->nome, aux->item->valor, aux->quantidade);
+        printf("%d %s R$ %.2f Quantidade: %d\n", aux->id, aux->item->nome, aux->item->valor, aux->quantidade);
         aux = aux->prox;
     }
-
-    printf("%s R$ %.2f Quantidade: %d\n", aux->item->nome, aux->item->valor, aux->quantidade);
+    printf("%d %s R$ %.2f Quantidade: %d\n", aux->id, aux->item->nome, aux->item->valor, aux->quantidade);
 }
 
 // ****************************************
