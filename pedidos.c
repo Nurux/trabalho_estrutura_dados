@@ -145,7 +145,7 @@ ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) 
     }
     idItem++;
     // necessario para manter o incremento do id apos a remocao de um item
-    if (idItem == aux->id) {
+    while (idItem <= aux->id) {
         idItem++;
     }
     novoNo->id = idItem;
@@ -155,19 +155,21 @@ ItemPedido *inserirItemNoPedido(int id, int quantidade, ItemPedido *itemPedido) 
 }
 
 ItemPedido *retirarItemDoPedido(int id, ItemPedido *itensDoPedido) {
-    // se id = 1 entao e o primeiro item do pedido
-    if (id == 1) {
-        itensDoPedido = itensDoPedido->prox;
-    }
-
     ItemPedido *aux = itensDoPedido;
     ItemPedido *anterior = aux;
 
+    int cont = 1;
+
     while (aux->prox != NULL) {
         if (aux->id == id) {
+            if (cont == 1) {
+                itensDoPedido = itensDoPedido->prox;
+                return itensDoPedido;
+            }
             anterior->prox = aux->prox;
             return itensDoPedido;
         }
+        cont++;
         anterior = aux;
         aux = aux->prox;
     }

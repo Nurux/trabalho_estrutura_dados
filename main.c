@@ -63,7 +63,7 @@ int main() {
                     }
 
                     if (item == -2) {
-                        printf("Digite o id referente a sua lista de pedidos que voce deseja retirar:");
+                        printf("Digite o id referente a sua lista de pedidos que voce deseja retirar: ");
                         fflush(stdin);
                         scanf("%d", &id);
                         itemPedido = retirarItemDoPedido(id, itemPedido);
